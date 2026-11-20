@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Pucketbudget</string>
+    <string name="nav_home">Home</string>
+    <string name="nav_transactions">Transactions</string>
+    <string name="nav_budget">Budget</string>
+    <string name="nav_savings">Savings</string>
+    <string name="nav_settings">Settings</string>
+    <string name="notification_channel_name">Budget Warnings</string>
+    <string name="notification_channel_desc">Alerts when spending approaches or exceeds your daily, weekly, or monthly budget limits.</string>
+</resources>
