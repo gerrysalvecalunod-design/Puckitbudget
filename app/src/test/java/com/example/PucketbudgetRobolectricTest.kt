@@ -1,9 +1,11 @@
 package com.example
 
 import android.content.Context
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
@@ -31,11 +33,21 @@ class PucketbudgetRobolectricTest {
         assertEquals("Pucketbudget", context.getString(R.string.app_name))
     }
 
+    @OptIn(ExperimentalTestApi::class)
     @Test
     fun bottomNavigation_and_addExpenseFlow_works() {
+        // Verify Splash Screen & Brand Logo on launch
+        composeRule.onNodeWithTag("splash_screen").assertIsDisplayed()
+        composeRule.onNodeWithTag("splash_logo").assertIsDisplayed()
+
+        // Wait for Splash Screen transition into Home
+        composeRule.waitUntil(timeoutMillis = 5000) {
+            composeRule.onAllNodesWithTag("splash_screen").fetchSemanticsNodes().isEmpty()
+        }
         composeRule.waitForIdle()
 
-        // Verify all 5 bottom navigation items and Home balance card
+        // Verify Home logo, balance card, and all 5 bottom navigation items
+        composeRule.onNodeWithTag("home_brand_logo").assertIsDisplayed()
         composeRule.onNodeWithTag("home_balance_card").assertIsDisplayed()
         composeRule.onNodeWithTag("nav_home").assertIsDisplayed()
         composeRule.onNodeWithTag("nav_transactions").assertIsDisplayed()

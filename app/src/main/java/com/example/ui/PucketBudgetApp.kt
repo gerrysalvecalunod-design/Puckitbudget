@@ -1,6 +1,9 @@
 package com.example.ui
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Row
@@ -56,8 +59,10 @@ import com.example.ui.screens.BudgetScreen
 import com.example.ui.screens.HomeScreen
 import com.example.ui.screens.SavingsScreen
 import com.example.ui.screens.SettingsScreen
+import com.example.ui.screens.SplashScreen
 import com.example.ui.screens.TransactionsScreen
 import com.example.ui.viewmodel.BudgetViewModel
+import kotlinx.coroutines.delay
 
 enum class PucketTab(
     val label: String,
@@ -78,8 +83,16 @@ fun PucketBudgetApp(viewModel: BudgetViewModel) {
     val snackbarMessage by viewModel.snackbarMessage.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
+    var showSplash by rememberSaveable { mutableStateOf(true) }
     var selectedTabIndex by rememberSaveable { mutableIntStateOf(0) }
     var showReportsInBudget by rememberSaveable { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        if (showSplash) {
+            delay(1050)
+            showSplash = false
+        }
+    }
 
     var showTransactionSheet by remember { mutableStateOf(false) }
     var sheetInitialType by remember { mutableStateOf(TransactionType.EXPENSE) }
@@ -304,6 +317,13 @@ fun PucketBudgetApp(viewModel: BudgetViewModel) {
                     }
                 }
             }
+        }
+
+        AnimatedVisibility(
+            visible = showSplash,
+            exit = fadeOut(animationSpec = tween(durationMillis = 320))
+        ) {
+            SplashScreen()
         }
     }
 }
